@@ -4,7 +4,7 @@ from requests import get
 from sys import argv
 
 if __name__ == "__main__":
-
+    """gather data from api"""
     user_id = argv[1]
 
     base_url = "https://jsonplaceholder.typicode.com"
