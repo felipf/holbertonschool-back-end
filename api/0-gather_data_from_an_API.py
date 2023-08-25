@@ -9,19 +9,19 @@ if __name__ == "__main__":
 
     base_url = "https://jsonplaceholder.typicode.com"
     user_ep = f"{base_url}/users/{user_id}"
-    todo_ep = f"{base_url}/todos/?userId={user_id}"
+    todos_ep = f"{base_url}/todos/?userId={user_id}"
 
     user_data = get(user_ep).json()
     user_name = user_data.get("name")
-    todo_data = get(todo_ep).json()
+    todos_data = get(todos_ep).json()
 
     completed_tasks = []
 
-    for task in todo_data:
+    for task in todos_data:
         if task["completed"]:
             completed_tasks.append(task["title"])
 
-    total_tasks = len(todo_data)
+    total_tasks = len(todos_data)
     num_completed_tasks = len(completed_tasks)
 
     print(f"Employee {user_name} is done with tasks"
