@@ -14,7 +14,7 @@ if __name__ == "__main__":
 
     user_data = get(user_ep).json()
     user_name = user_data.get("username")
-    todos_data = get(todos_ep).json()
+    todos_data = get(todos_ep).json(
 
     with open(f"{user_id}.csv", "w") as csv_file:
         csv_writer = writer(csv_file, quoting=QUOTE_ALL)
