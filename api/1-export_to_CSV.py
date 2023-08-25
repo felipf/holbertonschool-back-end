@@ -1,20 +1,23 @@
 #!/usr/bin/python3
 """export data in the CSV format"""
-import csv
-import requests
+from csv import writer, QUOTE_ALL
+from requests import get
 from sys import argv
 
-if __name__ == '__main__':
-    user_page = requests.get(
-        "https://jsonplaceholder.typicode.com/users/{}".
-        format(argv[1])).json()
-    todo_page = requests.get(
-        "https://jsonplaceholder.typicode.com/todos?userId={}".
-        format(argv[1])).json()
+if __name__ == "__main__":
+    """export data in the CSV format"""
+    user_id = argv[1]
 
-    with open("{}.csv".format(argv[1]), 'w', newline='') as csvfile:
-        csv_writer = csv.writer(csvfile, quoting=csv.QUOTE_ALL)
-        for task in todo_page:
-            csv_writer.writerow([int(argv[1]), user_page.get('username'),
-                                task.get('completed'),
-                                task.get('title')])
+    base_url = "https://jsonplaceholder.typicode.com"
+    user_ep = f"{base_url}/users/{user_id}"
+    todos_ep = f"{base_url}/todos/?userId={user_id}"
+
+    user_data = get(user_ep).json()
+    user_name = user_data.get("username")
+    todos_data = get(todos_ep).json()
+
+    with open(f"{user_id}.csv", "w") as csv_file:
+        csv_writer = writer(csv_file, quoting=QUOTE_ALL)
+        for task in todos_data:
+            csv_writer.writerow([user_id, user_name,
+                                 task["completed"], task["title"]])
