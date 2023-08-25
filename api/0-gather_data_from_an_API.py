@@ -18,7 +18,7 @@ if __name__ == "__main__":
     completed_tasks = []
 
     for task in todos_data:
-        if task["completed"]
+        if task["completed"]:
             completed_tasks.append(task["title"])
 
     total_tasks = len(todos_data)
