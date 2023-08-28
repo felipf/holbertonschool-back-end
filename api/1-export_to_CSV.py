@@ -1,23 +1,33 @@
 #!/usr/bin/python3
 """export data in the CSV format"""
-from csv import writer, QUOTE_ALL
-from requests import get
+import requests
+import json
+import csv
 from sys import argv
 
-if __name__ == "__main__":
-    """export data in the CSV format"""
+user_id = None
+
+try:
     user_id = argv[1]
+except Exception as e:
+    pass
 
-    base_url = "https://jsonplaceholder.typicode.com"
-    user_ep = f"{base_url}/users/{user_id}"
-    todos_ep = f"{base_url}/todos/?userId={user_id}"
+todos_requests = requests.get(f"https://jsonplaceholder"
+                              f".typicode.com/users/{user_id}/todos")
+user_request = requests.get(f"https://jsonplaceholder"
+                            f".typicode.com/users/{user_id}")
+dicted_user = json.loads(user_request.text)
+dicted_todos = json.loads(todos_requests.text)
+completed_tasks = []
+for x in dicted_todos:
+    completed_tasks.append(x)
 
-    user_data = get(user_ep).json()
-    user_name = user_data.get("username")
-    todos_data = get(todos_ep).json()
-
-    with open(f"{user_id}.csv", "w") as csv_file:
-        csv_writer = writer(csv_file, quoting=QUOTE_ALL)
-        for task in todos_data:
-            csv_writer.writerow([user_id, user_name,
-                                 task["completed"], task["title"]])
+if __name__ == "__main__":
+    """only execute the code when is main"""
+    with open(f"{user_id}.csv", mode="w") as f:
+        for values in dicted_todos:
+            f.write(f'"{user_id}",')
+            f.write(f'"{dicted_user.get("username")}",')
+            f.write(f'"{values.get("completed")}",')
+            f.write(f'"{values.get("title")}"')
+            f.write('\n')
